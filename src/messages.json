@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Message from yourFriend",
+    "content": "Hey, how are you doing today?",
+    "received": "10 minutes ago"
+  },
+  {
+    "title": "Message from SecretAdmirer",
+    "content": "I really liked your recent post!",
+    "received": "2 hours ago"
+  },
+  {
+    "title": "Message from anonymous",
+    "content": "Wanna catch up today?",
+    "received": "1 day ago"
+  }
+]
+
