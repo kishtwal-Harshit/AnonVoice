@@ -6,9 +6,12 @@ import { User} from "next-auth";
 import mongoose from "mongoose";
 
 
-export async function POST(request : Request,{params}:{params: {messageid : string}}){
+export async function POST(request : Request, context: { params: Promise<{ messageid: string }> }){
     
     await dbConnect();
+    
+    // Await the params Promise in Next.js 15
+    const params = await context.params;
     const messageId = params.messageid;
 
     const session = await getServerSession(authOptions);
@@ -71,7 +74,7 @@ export async function POST(request : Request,{params}:{params: {messageid : stri
                 status : 200
             })
     } catch(error:any){
-        console.log('error in delete message : ',error.data.message);
+        console.log('error in delete message : ',error);
         return Response.json({
                 success : false,
                 message : "error in delete message api"
