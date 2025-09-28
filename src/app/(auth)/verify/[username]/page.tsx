@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Loader2, MessageCircle, Mail, Shield, CheckCircle } from 'lucide-react';
+import { Loader2, ShieldCheck, KeyRound, User, ArrowLeft } from 'lucide-react';
 import { verifySchema } from '@/schemas/verifySchema';
 import { useRef, useState, useEffect } from 'react';
 
@@ -82,67 +82,64 @@ const VerifyAccountPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-lg">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
         {/* Header Section */}
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-              <Shield className="w-10 h-10 text-white" />
-            </div>
+          <div className="w-16 h-16 bg-slate-800 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <ShieldCheck className="w-8 h-8 text-white" />
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">
             Verify Your Account
           </h1>
-          
-          <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-blue-100 shadow-lg mb-6">
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <Mail className="w-4 h-4 text-blue-600" />
-              </div>
-              <p className="text-gray-700 font-medium">Code sent to your email</p>
+          <p className="text-slate-600">
+            Enter the verification code sent to your email
+          </p>
+        </div>
+
+        {/* Username Display */}
+        <div className="bg-white rounded-lg p-4 border border-slate-200 shadow-sm mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-slate-600" />
             </div>
-            <p className="text-sm text-gray-600">
-              We've sent a 6-digit verification code to verify your identity
-            </p>
+            <div>
+              <p className="text-sm text-slate-500 font-medium">Verifying account for</p>
+              <p className="text-slate-900 font-semibold">@{username}</p>
+            </div>
           </div>
         </div>
 
         {/* Verification Form */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-blue-100 shadow-lg">
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="code"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <CheckCircle className="w-5 h-5 text-blue-600" />
+                    <FormLabel className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                      <KeyRound className="w-4 h-4 text-slate-600" />
                       Verification Code
                     </FormLabel>
                     <FormControl>
-                      <div className="flex justify-center gap-3">
+                      <div className="flex justify-center gap-2">
                         {otp.map((digit, index) => (
-                          <div key={index} className="relative">
-                            <Input
-                              ref={(el) => { inputRefs.current[index] = el; }}
-                              type="text"
-                              maxLength={1}
-                              value={digit}
-                              onChange={(e) => handleInputChange(index, e, field)}
-                              onKeyDown={(e) => handleKeyDown(index, e)}
-                              className="w-14 h-14 text-center text-xl font-bold bg-white/80 backdrop-blur-sm border-2 border-blue-200 rounded-xl shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 hover:border-blue-300"
-                            />
-                            {digit && (
-                              <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl opacity-20 pointer-events-none"></div>
-                            )}
-                          </div>
+                          <Input
+                            key={index}
+                            ref={(el) => { inputRefs.current[index] = el; }}
+                            type="text"
+                            maxLength={1}
+                            value={digit}
+                            onChange={(e) => handleInputChange(index, e, field)}
+                            onKeyDown={(e) => handleKeyDown(index, e)}
+                            className="w-12 h-12 text-center text-lg font-bold border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent transition-all duration-200"
+                          />
                         ))}
                       </div>
                     </FormControl>
-                    <FormMessage className="text-red-500 text-center mt-2" />
+                    <FormMessage className="text-red-600 text-center mt-2" />
                   </FormItem>
                 )}
               />
@@ -150,35 +147,66 @@ const VerifyAccountPage = () => {
               <Button 
                 type="submit" 
                 disabled={form.formState.isSubmitting} 
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+                className="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-3 rounded-md shadow-sm hover:shadow-md transition-all duration-200"
               >
                 {form.formState.isSubmitting ? (
                   <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" /> 
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
                     Verifying Account...
                   </>
                 ) : (
                   <>
-                    <Shield className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                    <ShieldCheck className="mr-2 h-4 w-4" />
                     Verify Account
                   </>
                 )}
               </Button>
             </form>
           </Form>
+        </div>
 
-          {/* Footer Info */}
-          
+        {/* Additional Actions */}
+        <div className="mt-6 space-y-4">
+          {/* Resend Code */}
+          <div className="text-center">
+            <p className="text-sm text-slate-600 mb-3">
+              Didn't receive the code?
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                // Add resend logic here
+                toast.info('Resend feature coming soon')
+              }}
+              className="text-sm text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50 font-medium"
+              disabled={form.formState.isSubmitting}
+            >
+              Resend Code
+            </Button>
+          </div>
+
+          {/* Back to Sign In */}
+          <div className="text-center">
+            <Button
+              variant="ghost"
+              onClick={() => router.push('/sign-in')}
+              className="text-slate-600 hover:text-slate-900 font-medium"
+              disabled={form.formState.isSubmitting}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Sign In
+            </Button>
+          </div>
         </div>
 
         {/* Security Notice */}
-        <div className="mt-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-100">
-          <div className="flex items-center gap-3 text-sm text-gray-600">
-            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <Shield className="w-3 h-3 text-blue-600" />
+        <div className="mt-6 bg-slate-50 rounded-lg p-4 border border-slate-200">
+          <div className="flex items-center gap-3 text-sm text-slate-600">
+            <div className="w-6 h-6 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <ShieldCheck className="w-3 h-3 text-slate-600" />
             </div>
             <p>
-              This verification step ensures the security of your AnonVoice account and protects your privacy.
+              This verification step ensures the security of your anonymous account and protects your privacy.
             </p>
           </div>
         </div>
