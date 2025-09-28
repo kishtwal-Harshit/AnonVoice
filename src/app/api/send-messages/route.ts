@@ -13,7 +13,7 @@ export async function POST(request : Request){
     await dbConnect();
     const {username, content} = await request.json();
     try{
-        const session = await getServerSession(authOptions);
+       /* const session = await getServerSession(authOptions);
         if(!session){
             return Response.json({
                 success : false,
@@ -33,11 +33,21 @@ export async function POST(request : Request){
             {
                 status : 404
             })
-        }
+        }*/
 
         //check if user is accepting messages
-        console.log('user=',username);
-        console.log('status=',user.isAcceptingMessage);
+        const user = await UserModel.findOne({username});
+        if(!user){
+        return Response.json({
+                success : false,
+                message : "user not found"
+            },
+            {
+                status : 404
+            })
+        }
+       // console.log('user=',username);
+        //console.log('status=',user.isAcceptingMessage);
         if(!user.isAcceptingMessage){
             return Response.json({
                 success : false,
@@ -53,11 +63,11 @@ export async function POST(request : Request){
         user.messages.push(newMessage as Message);
         await user.save();
 
-        const saveActivityinSender = await ActivityModel.updateOne(
+        /*const saveActivityinSender = await ActivityModel.updateOne(
             {user : sender},
             {$push : {activity:`message sent to  : ${username} at ${new Date().toLocaleString()}`}},
             {upsert : true}
-        )
+        )*/
 
         /*if(!saveActivityinSender){
             return Response.json({
