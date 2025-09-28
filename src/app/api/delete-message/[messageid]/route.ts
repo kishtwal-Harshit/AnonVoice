@@ -6,7 +6,7 @@ import { User} from "next-auth";
 import mongoose from "mongoose";
 
 
-export async function POST(request: Request, { params }: { params: { messageid: string } }) {
+export async function POST(request : Request,{params}:{params: {messageid : string}}){
     
     await dbConnect();
     const messageId = params.messageid;
