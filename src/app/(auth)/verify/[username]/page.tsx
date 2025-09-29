@@ -67,6 +67,8 @@ const VerifyAccountPage = () => {
     }
   };
 
+  const [isResending, setIsResending] = useState(false);
+
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
     try {
       const response = await axios.post<ApiResponse>('/api/verify-code', {
@@ -78,6 +80,21 @@ const VerifyAccountPage = () => {
       router.replace('/sign-in');
     } catch (error : any) {
       toast.error(error.response?.data.message ?? 'Verification failed');
+    }
+  };
+
+  const handleResendCode = async () => {
+    setIsResending(true);
+    try {
+      const response : any= await axios.post<ApiResponse>('/api/resend-verify-code', {
+        username,
+      });
+
+      toast.success(response.data.message ?? 'Verification code resent successfully');
+    } catch (error : any) {
+      toast.error(error.response?.data.message ?? 'Failed to resend code');
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -168,7 +185,29 @@ const VerifyAccountPage = () => {
           </Form>
 
           {/* Footer Info */}
-          
+          <div className="mt-6 pt-6 border-t border-slate-200">
+            <div className="text-center">
+              <p className="text-sm text-slate-600 mb-3">
+                Didn't receive the code?
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleResendCode}
+                disabled={isResending || form.formState.isSubmitting}
+                className="text-sm text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50 font-medium"
+              >
+                {isResending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Resending...
+                  </>
+                ) : (
+                  'Resend Code'
+                )}
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/* Security Notice */}
